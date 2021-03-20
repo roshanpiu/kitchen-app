@@ -58,6 +58,40 @@ function SetName(props) {
   );
 }
 
+function GitHubUsers({ login }) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!login) return;
+    setLoading(true);
+    fetch(`https://api.github.com/users/${login}`)
+      .then((res) => res.json())
+      .then(setData)
+      .then(() => setLoading(false))
+      .catch(setError);
+  }, [login]);
+
+  if(loading) {
+    return <h1>Loading....</h1>
+  }
+
+  if(error) {
+    return <pre>{JSON.stringify(error, null, 2)}</pre>
+  }
+
+  if (data) {
+    return (
+      <div>
+        <h3>{data.name}</h3>
+        <p>{data.location}</p>
+      </div>
+    );
+  }
+  return <div>No Data Available</div>;
+}
+
 const dishes = ["Rice and Curry", "Kottu", "String Hoppers", "Hoppers"];
 
 const dishObject = dishes.map((d, i) => ({ id: i, title: d }));
@@ -75,6 +109,7 @@ function App() {
       <Main adjective="amazing" dishes={dishObject} />
       <Footer year={new Date().getFullYear()} />
       <SetName setName={setName} initialName={initialName} />
+      <GitHubUsers login="roshanpiu" />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import "./App.css";
+import React, { useState } from "react";
 
 function Header(props) {
   return (
@@ -12,7 +13,11 @@ function Main(props) {
   return (
     <section>
       <p>We serve the most {props.adjective} food around.</p>
-      <img alt="a image abut restaurant" src="https://github.com/roshanpiu.png" height={200}/>
+      <img
+        alt="a image abut restaurant"
+        src="https://github.com/roshanpiu.png"
+        height={200}
+      />
       <ul style={{ textAlign: "left" }}>
         {props.dishes.map((d) => (
           <li key={d.id}>{d.title}</li>
@@ -30,16 +35,35 @@ function Footer(props) {
   );
 }
 
+function SetName(props) {
+  const { setName, initialName } = props;
+  const [inputVal, setInputVal] = useState("");
+  return (
+    <div>
+      <input
+        value={inputVal}
+        onChange={(val) => setInputVal(inputVal + val.nativeEvent.data)}
+        type="text"
+      ></input>
+      <button onClick={() => setName(inputVal)}>set name</button>
+      <button onClick={() => setName(initialName)}>reset</button>
+    </div>
+  );
+}
+
 const dishes = ["Rice and Curry", "Kottu", "String Hoppers", "Hoppers"];
 
-const dishObject = dishes.map((d, i) => ({id: i, title: d}))
+const dishObject = dishes.map((d, i) => ({ id: i, title: d }));
 
 function App() {
+  const initialName = "Cindy";
+  const [name, setName] = useState(initialName);
   return (
     <div className="App">
-      <Header name="Cindy" />
+      <Header name={name} />
       <Main adjective="amazing" dishes={dishObject} />
       <Footer year={new Date().getFullYear()} />
+      <SetName setName={setName} initialName={initialName} />
     </div>
   );
 }

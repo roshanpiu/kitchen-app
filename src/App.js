@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Header(props) {
   return (
@@ -46,7 +46,14 @@ function SetName(props) {
         type="text"
       ></input>
       <button onClick={() => setName(inputVal)}>set name</button>
-      <button onClick={() => setName(initialName)}>reset</button>
+      <button
+        onClick={() => {
+          setName(initialName);
+          setInputVal("");
+        }}
+      >
+        reset
+      </button>
     </div>
   );
 }
@@ -58,6 +65,10 @@ const dishObject = dishes.map((d, i) => ({ id: i, title: d }));
 function App() {
   const initialName = "Cindy";
   const [name, setName] = useState(initialName);
+
+  useEffect(() => {
+    console.log(`It's ${name}'s Kitchen`);
+  }, [name]);
   return (
     <div className="App">
       <Header name={name} />
